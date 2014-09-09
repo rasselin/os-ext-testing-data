@@ -27,7 +27,7 @@ pipelines:
         verified: -1
 
   - name: silent
-    description: Newly uploaded patchsets enter this pipeline to check jobs whose results are not to be posted 
+    description: Newly uploaded patchsets enter this pipeline to check jobs whose results are NOT to be posted (because e.g. they are not yet stable)
     manager: IndependentPipelineManager
     precedence: low
     trigger:
@@ -36,10 +36,6 @@ pipelines:
         - event: change-restored
         - event: comment-added
           comment: (?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*recheck(( (?:bug|lp)[\s#:]*(\d+))|( no bug))\s*$
-        - event: comment-added
-          comment: (?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*recheck(( (?:bug|lp)[\s#:]*(\d+))|( HP Storage CI))\s*$
-        - event: comment-added
-          comment: (?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*recheck(( (?:bug|lp)[\s#:]*(\d+))|( Jenkins))\s*$
 
   - name: patch
     description: Newly uploaded patchsets enter this pipeline to check jobs whose results are not to be posted
@@ -72,6 +68,10 @@ pipelines:
         verified: -2
     window-floor: 20
     window-increase-factor: 2
+
+jobs:
+  - name: ^dsvm-tempest.*$
+    parameter-function: single_use_node
 
 projects:
   - name: openstack-dev/sandbox
