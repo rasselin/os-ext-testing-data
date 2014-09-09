@@ -1,0 +1,76 @@
+script-dir: /etc/nodepool/scripts
+
+dburi: 'mysql://nodepool:<%= mysql_password %>@localhost/nodepool'
+
+cron:
+  cleanup: '*/1 * * * *'
+  check: '*/15 * * * *'
+  image-update: '14 14 * * *'
+
+zmq-publishers:
+  - tcp://localhost:8888
+
+gearman-servers:
+  - host: <%= gearman_server %>
+
+labels:
+  - name: d-p-c
+    image: d-p-c
+    min-ready: 2
+    providers:
+      - name: local_01
+
+  - name: d-p-c-fc
+    image: d-p-c-fc
+    min-ready: 1
+    providers:
+      - name: local_01_fc
+
+
+providers:
+  - name: local_01
+    username: '<%= provider_username %>'
+    password: '<%= provider_password %>'
+    auth-url: 'http://localhost:5000/v2.0'
+    project-id: 'admin'
+    max-servers: 2
+    #This keypair is used to create the image and should be found in the cloud keypairs.
+    #The public/private parts of this keypair need to be in the user who's running nodepool ~/.ssh/id_rsa
+    #You can then login to vm's e.g. ubuntu username using this
+    keypair: 'jenkins'
+    images:
+      - name: d-p-c
+        # This is the image name to use found in this provider's `glance image-list`
+        base-image: '<%= provider_image_name %>'
+        min-ram: 8192
+        # This is the script that will be used to prepare the image
+        setup: <%= provider_image_setup_script_name %>
+        #Set the public key part only of the jenkin's key (no whitespace) to the NODEPOOL_SSH_KEY environment variable in order to
+        #inject it into the image's jenkins user .ssh/authorized_keys
+        #This key will be used to log in and setup jenkins on the target VM
+        private-key: '/home/nodepool/.ssh/id_rsa'
+
+# Due to the nature of FC passthrough, at most one node per blade can be enabled.
+# To acheive this with nodepool, create a "new" provider with max-server : 1
+# and this single image.
+  - name: local_01_fc
+    username: '<%= provider_username %>'
+    password: '<%= provider_password %>'
+    auth-url: 'http://localhost:5000/v2.0'
+    project-id: 'admin'
+    max-servers: 1
+    keypair: 'jenkins'
+    images:
+      - name: d-p-c-fc
+        base-image: '<%= provider_image_name %>'
+        min-ram: 8192
+        setup: <%= provider_image_setup_script_name %>
+        private-key: '/home/nodepool/.ssh/id_rsa'
+
+targets:
+  - name: local-jenkins
+    jenkins:
+      url: 'http://localhost:8080/'
+      user: '<%= jenkins_api_user %>'
+      apikey: '<%= jenkins_api_key %>'
+      credentials-id: '<%= jenkins_credentials_id %>'

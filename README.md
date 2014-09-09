@@ -28,7 +28,7 @@ Follow these manual instructions to get your data repository set up:
    Once you do the above, copy the `jenkins_key` and `jenkins_key.pub` files into your
    data repository.
 
-4. Open up `vars.sh` in an editor.
+4. Copy `vars.sh.sample` to `vars.sh` and open up `vars.sh` in an editor.
 
 5. Change the value of the `$UPSTREAM_GERRIT_USER` shell
    variable to the Gerrit username you registered with the upstream OpenStack Infrastructure
@@ -53,3 +53,6 @@ Follow these manual instructions to get your data repository set up:
 
 10. Example the `etc/zuul/layout.yaml` file and ensure you set up each upstream project that your
    testing system intends to run Jenkins jobs for.
+
+11. Copy the `etc/nodepool/nodepool.yaml.sample` to  `etc/nodepool/nodepool.yaml` and modify as needed. Some common properties
+    are set in the vars.sh file and populated by puppet.
