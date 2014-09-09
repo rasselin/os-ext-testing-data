@@ -4,7 +4,7 @@ includes:
 pipelines:
   - name: check
     description: Newly uploaded patchsets enter this pipeline to receive an initial +/-1 Verified vote from Jenkins.
-    failure-message: Build failed.  For information on how to proceed, see https://wiki.openstack.org/wiki/GerritJenkinsGit#Test_Failures
+    failure-message: "Build failed.  For information on how to proceed, see https://wiki.openstack.org/wiki/GerritJenkinsGit#Test_Failures. For 3rd party ci contact info: https://wiki.openstack.org/wiki/ThirdPartySystems/"
     manager: IndependentPipelineManager
     precedence: low
     trigger:
@@ -25,6 +25,30 @@ pipelines:
     failure:
       gerrit:
         verified: -1
+
+  - name: silent
+    description: Newly uploaded patchsets enter this pipeline to check jobs whose results are not to be posted 
+    manager: IndependentPipelineManager
+    precedence: low
+    trigger:
+      gerrit:
+        - event: patchset-created
+        - event: change-restored
+        - event: comment-added
+          comment: (?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*recheck(( (?:bug|lp)[\s#:]*(\d+))|( no bug))\s*$
+        - event: comment-added
+          comment: (?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*recheck(( (?:bug|lp)[\s#:]*(\d+))|( HP Storage CI))\s*$
+        - event: comment-added
+          comment: (?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*recheck(( (?:bug|lp)[\s#:]*(\d+))|( Jenkins))\s*$
+
+  - name: patch
+    description: Newly uploaded patchsets enter this pipeline to check jobs whose results are not to be posted
+    manager: IndependentPipelineManager
+    precedence: low
+    trigger:
+      gerrit:
+        - event: comment-added
+          comment: (?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*check(( (?:bug|lp)[\s#:]*(\d+))|( patch))\s*$
 
   - name: gate
     description: Changes that have been approved by core developers are enqueued in order in this pipeline, and if they pass tests in Jenkins, will be merged.
