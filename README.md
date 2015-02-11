@@ -54,5 +54,5 @@ Follow these manual instructions to get your data repository set up:
 10. Example the `etc/zuul/layout.yaml` file and ensure you set up each upstream project that your
    testing system intends to run Jenkins jobs for.
 
-11. Copy the `etc/nodepool/nodepool.yaml.sample` to  `etc/nodepool/nodepool.yaml` and modify as needed. Some common properties
+11. Copy the `etc/nodepool/nodepool.yaml.erb.sample` to  `etc/nodepool/nodepool.yaml.erb` and modify as needed. Some common properties
     are set in the vars.sh file and populated by puppet.
