@@ -49,7 +49,7 @@ jobs:
     parameter-function: single_use_node
 
 projects:
-  - name: openstack-dev/sandbox
+  - name: openstack-dev/ci-sandbox
     check:
       # Remove this after successfully verifying communication with upstream
       # and seeing a posted successful review.
