@@ -55,7 +55,7 @@
           export PYTHONUNBUFFERED=true
           export DEVSTACK_GATE_TIMEOUT=120
           export DEVSTACK_GATE_TEMPEST=1
-          export DEVSTACK_GATE_TEMPEST_REGEX="tempest.api.volume."
+          export DEVSTACK_GATE_TEMPEST_REGEX="volume"
 
           # Let's use the http protocol instead of git protocol
           # export GIT_BASE="http://github.com"
