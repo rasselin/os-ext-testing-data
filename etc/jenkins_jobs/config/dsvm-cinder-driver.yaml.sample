@@ -58,11 +58,10 @@
           export DEVSTACK_GATE_TEMPEST_REGEX="volume"
 
           # Let's use the http protocol instead of git protocol
-          # export GIT_BASE="http://github.com"
-          export GIT_BASE="https://review.openstack.org/p"
+          export GIT_BASE=https://git.openstack.org
 
           if [ -z $ZUUL_PROJECT ]; then
-              export ZUUL_PROJECT=openstack-dev/sandbox
+              export ZUUL_PROJECT=openstack-dev/ci-sandbox
           fi
           if [ -z $ZUUL_BRANCH ]; then
               export ZUUL_BRANCH=master
