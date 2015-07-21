@@ -48,11 +48,19 @@ Follow these manual instructions to get your data repository set up:
 8. Change the value of the `$PUBLISH_HOST` to the host (without https:// prefix) you will publish
    job artifacts to.
 
-9. Examine the files in `etc/jenkins_jobs/config` and modify as you need. Refer to this blog post
-   for more information.
+9. Copy the `etc/nodepool/nodepool.yaml.erb.sample` to  `etc/nodepool/nodepool.yaml.erb` and modify as needed. Some common properties
+   are set in the vars.sh file and populated by puppet. Remember to update the nodepool image cron job at the top. It is currently
+   commented out.
 
-10. Example the `etc/zuul/layout.yaml` file and ensure you set up each upstream project that your
-   testing system intends to run Jenkins jobs for.
 
-11. Copy the `etc/nodepool/nodepool.yaml.erb.sample` to  `etc/nodepool/nodepool.yaml.erb` and modify as needed. Some common properties
-    are set in the vars.sh file and populated by puppet.
+Migrate to project-config
+-------------------------
+
+
+1. Create a new git repo called project-config-name
+
+2. Copy the files in `etc/jenkins_jobs/config` to project-config-name/jenkins/jobs and [modify as you need]
+(http://docs.openstack.org/infra/system-config/jjb.html).
+
+3. Copy the example the `etc/zuul/layout.yaml` to project-config-name/zuul/ and [configure it to your needs]
+(http://docs.openstack.org/infra/system-config/zuul.html)

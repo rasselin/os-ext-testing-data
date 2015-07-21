@@ -6,7 +6,12 @@ dburi: 'mysql://nodepool:<%= mysql_password %>@localhost/nodepool'
 cron:
   cleanup: '*/1 * * * *'
   check: '*/15 * * * *'
-  image-update: '14 14 * * *'
+# STOP: Please choose a random hour for nodepool image updates.
+# This will help reduce the load on upstream git farms & mirros where all 3rd
+# party ci systems start building images at the same time.
+# Doing so is easy: update the first '17' below with a random number between 0 to 23
+# This references the hour of the day when images will be built.
+#  image-update: '17 17 * * *'
 
 zmq-publishers:
   - tcp://localhost:8888
