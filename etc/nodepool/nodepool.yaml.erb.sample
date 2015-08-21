@@ -51,7 +51,7 @@ providers:
     username: '<%= provider_username %>'
     password: '<%= provider_password %>'
     auth-url: 'http://localhost:5000/v2.0'
-    project-id: 'admin'
+    project-name: 'admin'
     max-servers: 2
     images:
       - name: dpc
@@ -67,7 +67,7 @@ providers:
     username: '<%= provider_username %>'
     password: '<%= provider_password %>'
     auth-url: 'http://localhost:5000/v2.0'
-    project-id: 'admin'
+    project-name: 'admin'
     max-servers: 1
     images:
       - name: dpc
