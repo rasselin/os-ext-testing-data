@@ -1,30 +1,33 @@
 includes:
-#TODO: Rename this file. These functions are what enables single use nodes in nodepool.
+    #TODO: Rename this file. These functions are what enables single use nodes in nodepool.
   - python-file: openstack_functions.py
 
 pipelines:
   - name: check
     description: Newly uploaded patchsets enter this pipeline to receive an initial +/-1 Verified vote from Jenkins.
-    failure-message: "Build failed.  For information on how to proceed, see https://wiki.openstack.org/wiki/GerritJenkinsGit#Test_Failures. For 3rd party ci contact info: https://wiki.openstack.org/wiki/ThirdPartySystems/"
+    failure-message: "Build failed. For 3rd party ci contact info: https://wiki.openstack.org/wiki/ThirdPartySystems"
     manager: IndependentPipelineManager
     trigger:
       gerrit:
         - event: patchset-created
         - event: change-restored
-        - event: comment-added
-
-          comment: (?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*recheck(( (?:bug|lp)[\s#:]*(\d+))|( no bug))\s*$
-        # Change "myvendor" below to your vendor's name to add a custom
+        # TODO: Change "myvendor" below to your vendor's name to add a custom
         # recheck trigger that runs the check pipeline jobs when someone
         # adds a comment to a review that says "recheck $VENDOR".
         - event: comment-added
-          comment: (?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*recheck(( (?:bug|lp)[\s#:]*(\d+))|( myvendor))\s*$
+          comment: (?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*recheck myvendor\s*$
     success:
       gerrit:
         verified: 1
     failure:
       gerrit:
         verified: -1
+    merge-failure:
+      smtp:
+        to: third_party_ci@example.com
+        from: zuul@example.com
+        subject: Upstream change {change} has a merge failure
+
 
   - name: silent
     description: Newly uploaded patchsets enter this pipeline to check jobs whose results are NOT to be posted (because e.g. they are not yet stable)
@@ -34,7 +37,7 @@ pipelines:
         - event: patchset-created
         - event: change-restored
         - event: comment-added
-          comment: (?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*recheck(( (?:bug|lp)[\s#:]*(\d+))|( no bug))\s*$
+          comment: (?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*recheck myvendor\s*$
 
   - name: patch
     description: Newly uploaded patchsets enter this pipeline to check jobs whose results are not to be posted
@@ -42,7 +45,7 @@ pipelines:
     trigger:
       gerrit:
         - event: comment-added
-          comment: (?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*check(( (?:bug|lp)[\s#:]*(\d+))|( patch))\s*$
+          comment: (?i)^(Patch Set [0-9]+:)?( [\w\\+-]*)*(\n\n)?\s*check patch\s*$
 
 jobs:
   - name: ^dsvm-tempest.*$
