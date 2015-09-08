@@ -9,6 +9,8 @@ It is intended to be copied to some private location (possibly a
 private GitHub repository, possibly somewhere else private in your organization). This
 repository will contain private SSH keys and other sensitive information.
 
+9/4/2015 It has been updated to follow the [project-config file layout](https://git.openstack.org/cgit/openstack-infra/project-config/tree/)
+
 Manual Instructions
 -------------------
 
@@ -46,21 +48,30 @@ Follow these manual instructions to get your data repository set up:
    variable in `vars.sh` to an appropriate value.
 
 8. Change the value of the `$PUBLISH_HOST` to the host (without https:// prefix) you will publish
-   job artifacts to.
+   job artifacts to. This is also known as the Log server.
 
-9. Copy the `etc/nodepool/nodepool.yaml.erb.sample` to  `etc/nodepool/nodepool.yaml.erb` and modify as needed. Some common properties
-   are set in the vars.sh file and populated by puppet. Remember to update the nodepool image cron job at the top. It is currently
-   commented out.
+9. Copy the `nodepool/nodepool.yaml.sample` to  `nodepool/nodepool.yaml.erb` and modify as needed. Some common properties
+   are delimited by <%=  %> are also set in the vars.sh file and need to be manually. These include username and password.
+   You can find the full configuration details in the [Nodepool manual](http://docs.openstack.org/infra/nodepool/).
 
+10. Copy the `zuul/layout.yaml.sample` file to `zuul/layout.yaml` and update it to your needs. You can find the full
+    configuration details in the [Zuul manual](http://docs.openstack.org/infra/zuul/).
+
+11. Adjust the jenkins jobs in `jenkins/jobs/` to your needs. You can find the full configuration details in the
+    [Jenkins Job Builder manual](http://docs.openstack.org/infra/jenkins-job-builder/)
 
 Migrate to project-config
 -------------------------
 
+These instructions assume you had been previously using the os-ext-testing-data before prior to migrating to the project-config
+file layout. The master version of this repo has been reorganized to reflect those changes.
 
-1. Create a new git repo called project-config-name
+1. Create a new git repo called project-config-name OR use your current os-ext-testing-data but with the files reorganized as explained below.
 
 2. Copy the files in `etc/jenkins_jobs/config` to project-config-name/jenkins/jobs and [modify as you need]
 (http://docs.openstack.org/infra/system-config/jjb.html).
 
-3. Copy the example the `etc/zuul/layout.yaml` to project-config-name/zuul/ and [configure it to your needs]
+3. Copy the example `etc/zuul/layout.yaml` to project-config-name/zuul/ and [configure it to your needs]
 (http://docs.openstack.org/infra/system-config/zuul.html)
+
+4. Copyt the example `etc/nodepool/nodepool.yaml.erb.sample to project-config-name/nodepool/nodepool.yaml
