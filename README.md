@@ -57,21 +57,23 @@ Follow these manual instructions to get your data repository set up:
 10. Optionally change the `$GIT_EMAIL` and `$GIT_NAME` to a different name. These are used by zuul to manage
     internal git trees.
 
-11. Copy the `nodepool/nodepool.yaml.sample` to  `nodepool/nodepool.yaml` and modify as needed. Some common properties
+11. Optionall add your SMTP server in `$SMTP_HOST` if you would like to use zuul's e-mail notification features.
+
+12. Copy the `nodepool/nodepool.yaml.sample` to  `nodepool/nodepool.yaml` and modify as needed. Some common properties
    are delimited by <%=  %> are also set in the vars.sh file and need to be manually. These include username and password.
    You can find the full configuration details in the [Nodepool manual](http://docs.openstack.org/infra/nodepool/).
    In particular, update the mysql_password to `$MYSQL_PASSWORD`. Choose a new time for the image-update cron job.
    Setup the OpenStack provider username, password, and auth-url. Finally, synchronize the jenkins environment to what
    you configured in vars.sh.
 
-10. Copy the `zuul/layout.yaml.sample` file to `zuul/layout.yaml` and update it to your needs. You can find the full
+13. Copy the `zuul/layout.yaml.sample` file to `zuul/layout.yaml` and update it to your needs. You can find the full
     configuration details in the [Zuul manual](http://docs.openstack.org/infra/zuul/). In particular, update the portions
     that have 'myvendor' and configure the e-mail addresses for merge-failures.
 
-11. Adjust the jenkins jobs in `jenkins/jobs/` to your needs. You can find the full configuration details in the
+14. Adjust the jenkins jobs in `jenkins/jobs/` to your needs. You can find the full configuration details in the
     [Jenkins Job Builder manual](http://docs.openstack.org/infra/jenkins-job-builder/)
 
-12. Setup an intial set of nodepool scripts and elements. Start by cloning OpenStack's
+15. Setup an intial set of nodepool scripts and elements. Start by cloning OpenStack's
     [project-config](https://git.openstack.org/cgit/openstack-infra/project-config/) and copy the contents of
     that repo's `nodepool/elements` to your repo's `nodepool/elements`. Optionally do the same for the `nodepool/scripts`
     folder. You may have to change these elements to work in your environment. If so, see this

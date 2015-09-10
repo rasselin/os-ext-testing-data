@@ -19,12 +19,15 @@ export MYSQL_PASSWORD=changeme
 
 export JENKINS_API_USER=jenkins
 #TODO(Optional) API Key is used if you secure your jenkins with a password
+#export JENKINS_API_PASSWORD=changeme
 #export JENKINS_API_KEY=<hex_id>
 
 #This credentials id is the default.  Change if needed. It will be used to create this file: /var/lib/jenkins/credentials.xml
 export JENKINS_CREDENTIALS_ID=f4f07d8e-2634-4d01-bcf6-7b8be996e062
 
 #TODO(step 10): (Optional) These are used by zuul to prepare commits.
-export GIT_EMAIL='testing@myvendor.com'
+export GIT_EMAIL='testing@example.com'
 export GIT_NAME='MyVendor Jenkins'
 
+#TODO(step 11): (Optional) If you would like zuul to be able to send e-mails, add in your SMTP server name here:
+#export SMTP_HOST=smtphost.example.com
