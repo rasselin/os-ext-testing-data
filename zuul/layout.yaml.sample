@@ -24,6 +24,7 @@ pipelines:
         verified: -1
     merge-failure:
       smtp:
+        #TODO: Update these to real e-mail addresses
         to: third_party_ci@example.com
         from: zuul@example.com
         subject: Upstream change {change} has a merge failure

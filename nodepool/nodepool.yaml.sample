@@ -1,6 +1,7 @@
 script-dir: /etc/nodepool/scripts
 elements-dir: /etc/nodepool/elements
 images-dir: /opt/nodepool_dib
+#TODO: set the mysql_password to vars.sh $MYSQL_PASSWORD
 dburi: 'mysql://nodepool:<%= mysql_password %>@localhost/nodepool'
 
 cron:
@@ -17,20 +18,14 @@ zmq-publishers:
   - tcp://localhost:8888
 
 gearman-servers:
-  - host: <%= gearman_server %>
+  - host: 127.0.0.1
 
 labels:
   - name: d-p-c
     image: dpc
-    min-ready: 2
-    providers:
-      - name: local_01
-
-  - name: d-p-c-fc
-    image: dpc
     min-ready: 1
     providers:
-      - name: local_01_fc
+      - name: local_01
 
 diskimages:
     - name: dpc
@@ -48,6 +43,7 @@ diskimages:
 
 providers:
   - name: local_01
+#TODO: Update the provider username, password, and authurl
     username: '<%= provider_username %>'
     password: '<%= provider_password %>'
     auth-url: 'http://localhost:5000/v2.0'
@@ -60,26 +56,13 @@ providers:
         username: jenkins
         private-key: '/home/nodepool/.ssh/id_rsa'
 
-# Due to the nature of FC passthrough, at most n nodes per blade can be enabled.
-# To acheive this with nodepool, create a "new" provider with max-server : n
-# and this single image.
-  - name: local_01_fc
-    username: '<%= provider_username %>'
-    password: '<%= provider_password %>'
-    auth-url: 'http://localhost:5000/v2.0'
-    project-name: 'admin'
-    max-servers: 1
-    images:
-      - name: dpc
-        min-ram: 8192
-        diskimage: dpc
-        username: jenkins
-        private-key: '/home/nodepool/.ssh/id_rsa'
-
 targets:
   - name: local-jenkins
     jenkins:
       url: 'http://localhost:8080/'
-      user: '<%= jenkins_api_user %>'
-      apikey: '<%= jenkins_api_key %>'
-      credentials-id: '<%= jenkins_credentials_id %>'
+#TODO: If you are using a different user in vars.sh JENKINS_API_USER, update it here.
+      user: 'jenkins'
+#TODO: If you are using secured jenkins, update this to vars.sh JENKINS_API_KEY.
+#      apikey: '<%= jenkins_api_key %>'
+#TODO: If you changed JENKINS_CREDENTIALS_ID in vars.sh, update it here too:
+      credentials-id: 'f4f07d8e-2634-4d01-bcf6-7b8be996e062'

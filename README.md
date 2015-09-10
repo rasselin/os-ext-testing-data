@@ -48,30 +48,44 @@ Follow these manual instructions to get your data repository set up:
    variable in `vars.sh` to an appropriate value.
 
 8. Change the value of the `$PUBLISH_HOST` to the host (without https:// prefix) you will publish
-   job artifacts to. This is also known as the Log server.
+   job artifacts to. This is also known as the Log server. You can set one up using [this script]
+   (https://github.com/rasselin/os-ext-testing/blob/master/puppet/install_log_server.sh).
 
-9. Copy the `nodepool/nodepool.yaml.sample` to  `nodepool/nodepool.yaml.erb` and modify as needed. Some common properties
+9. Change the mysql passwords in `$MYSQL_ROOT_PASSWORD` with the (current) root mysql password and
+   `$MYSQL_PASSWORD` with the desired nodepool mysql password.
+
+10. Optionally change the `$GIT_EMAIL` and `$GIT_NAME` to a different name. These are used by zuul to manage
+    internal git trees.
+
+11. Copy the `nodepool/nodepool.yaml.sample` to  `nodepool/nodepool.yaml` and modify as needed. Some common properties
    are delimited by <%=  %> are also set in the vars.sh file and need to be manually. These include username and password.
    You can find the full configuration details in the [Nodepool manual](http://docs.openstack.org/infra/nodepool/).
+   In particular, update the mysql_password to `$MYSQL_PASSWORD`. Choose a new time for the image-update cron job.
+   Setup the OpenStack provider username, password, and auth-url. Finally, synchronize the jenkins environment to what
+   you configured in vars.sh.
 
 10. Copy the `zuul/layout.yaml.sample` file to `zuul/layout.yaml` and update it to your needs. You can find the full
-    configuration details in the [Zuul manual](http://docs.openstack.org/infra/zuul/).
+    configuration details in the [Zuul manual](http://docs.openstack.org/infra/zuul/). In particular, update the portions
+    that have 'myvendor' and configure the e-mail addresses for merge-failures.
 
 11. Adjust the jenkins jobs in `jenkins/jobs/` to your needs. You can find the full configuration details in the
     [Jenkins Job Builder manual](http://docs.openstack.org/infra/jenkins-job-builder/)
 
+12. Setup an intial set of nodepool scripts and elements. Start by cloning OpenStack's
+    [project-config](https://git.openstack.org/cgit/openstack-infra/project-config/) and copy the contents of
+    that repo's `nodepool/elements` to your repo's `nodepool/elements`. Optionally do the same for the `nodepool/scripts`
+    folder. You may have to change these elements to work in your environment. If so, see this
+    [README](http://git.openstack.org/cgit/openstack-infra/project-config/tree/nodepool/elements/README.rst) for help.
+
+
 Migrate to project-config
 -------------------------
 
-These instructions assume you had been previously using the os-ext-testing-data before prior to migrating to the project-config
-file layout. The master version of this repo has been reorganized to reflect those changes.
+If you have not yet migrated to the 'project-config' layout, you are strongly encouraged to do so.
+Fortunately, it is a simple task:
 
-1. Create a new git repo called project-config-name OR use your current os-ext-testing-data but with the files reorganized as explained below.
+1. Copy the files in `etc/jenkins_jobs/config` to jenkins/jobs
 
-2. Copy the files in `etc/jenkins_jobs/config` to project-config-name/jenkins/jobs and [modify as you need]
-(http://docs.openstack.org/infra/system-config/jjb.html).
+2. Copy `etc/zuul/layout.yaml` to `zuul/layout.yaml`
 
-3. Copy the example `etc/zuul/layout.yaml` to project-config-name/zuul/ and [configure it to your needs]
-(http://docs.openstack.org/infra/system-config/zuul.html)
-
-4. Copyt the example `etc/nodepool/nodepool.yaml.erb.sample to project-config-name/nodepool/nodepool.yaml
+3. Copy the files and directories in `etc/nodepool` `nodepool/`
